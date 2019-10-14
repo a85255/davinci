@@ -1,0 +1,110 @@
+@import "../../assets/less/variable";
+
+.window {
+  width: 400px;
+  // background-color: fade(@secondary-color, 50%);
+  // padding-top: 30px;
+  margin-bottom: -20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+
+  .form {
+    width: 100%;
+    margin-bottom: 64px;
+  }
+
+  button {
+    width: 100%;
+    height: 48px;
+    background:linear-gradient(13deg,rgba(13,59,232,.1) 0%,rgba(186,0,226,.1) 100%);
+    border: 1px solid #0D3BE8;
+    border-radius: 24px;
+    color: @white;
+    font-size: 1.15em;
+    outline: none;
+    cursor: pointer;
+
+    &[disabled] {
+      background-color: fade(@white, 20);
+    }
+
+    i {
+      margin-right: 8px;
+    }
+  }
+}
+.line {
+  width: 100%;
+  height: 2px;
+  // background:linear-gradient(90deg,rgba(255,255,255,0.03) 6%,rgba(186,0,226,1) 39%,rgba(13,59,232,1) 56.99999999999999%,rgba(186,0,226,0.9) 78%,rgba(255,255,255,-0.05) 97%);
+  background:linear-gradient(90deg,rgba(255,255,255,0.03) 0%,rgba(255,255,255,1) 50%,rgba(255,255,255,0.03) 100%);
+  margin-bottom: 30px;
+}
+.input {
+  height: 45px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  i {
+    color: @white;
+    font-size: 24px;
+    flex-shrink: 0;
+    opacity: .5;
+  }
+
+  input {
+    flex: 1;
+    background-color: transparent;
+    padding: 0 15px;
+    border: 0;
+    outline: none;
+    color: @white;
+    font-size: 14px;
+    margin-top: 7px;
+
+    &::-webkit-input-placeholder {
+      color: fade(@white, 75);
+    }
+    &::-moz-placeholder {
+      color: fade(@white, 75);
+    }
+    &:-ms-input-placeholder {
+      color: fade(@white, 75);
+    }
+    &:-moz-placeholder {
+      color: fade(@white, 75);
+    }
+
+    &:-webkit-autofill {
+      -webkit-text-fill-color: @white;
+      transition: background-color 9999s ease-in-out 0s;
+    }
+  }
+}
+
+.tips {
+  margin-top: 64px;
+  span {
+    color: @light-bg;
+  }
+  a {
+    font-weight: 600;
+    color: #999;
+    &:hover {
+      color: #42b4ed;
+    }
+  }
+}
+
+.joinOrganizationLoadingContent {
+  padding: 20px 0;
+  color: @white;
+}
