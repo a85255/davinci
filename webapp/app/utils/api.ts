@@ -22,6 +22,7 @@ import config, { env } from '../globalConfig'
 
 // const host = config[env].host
 const host = 'http://192.168.10.59:8080/api/v3'
+// const host = 'http://192.168.11.41:8080/api/v3'
 export default {
   login: `${host}/login`,
   group: `${host}/groups`,

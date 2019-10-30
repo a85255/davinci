@@ -97,6 +97,14 @@ export class ProjectRole extends React.Component<IRoleProps, IRoleStates> {
     this.loadOrganizationRole()
     this.loadProjectRoles(this.props.projectDetail['id'])
     if (vizs && vizs.length) {
+      console.log(vizs, 123213)
+      vizs.forEach(el => {
+        if (el.key === 'DISPLAYS') {
+          el.key = '大屏(DISPLAYS)'
+        } else if (el.key === 'DASHBOARDS') {
+          el.key = '仪表板(DASHBOARDS)'
+        }
+      })
       this.setState({vizs})
     }
   }

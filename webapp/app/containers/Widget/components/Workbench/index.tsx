@@ -349,7 +349,7 @@ export class Workbench extends React.Component<IWorkbenchProps, IWorkbenchStates
     const { params, onAddWidget, onEditWidget } = this.props
     const { id, name, description, selectedViewId, controls, cache, expired, widgetProps, computed, originalWidgetProps, originalComputed, autoLoadData } = this.state
     if (!name.trim()) {
-      message.error('Widget名称不能为空')
+      message.error('Widget名称不能为空')
       return
     }
     if (!selectedViewId) {

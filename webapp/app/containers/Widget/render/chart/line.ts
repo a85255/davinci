@@ -36,6 +36,17 @@ import {
 const defaultTheme = require('../../../../assets/json/echartsThemes/default.project.json')
 const defaultThemeColors = defaultTheme.theme.color
 
+function colorFormat (val, op){   //HEX十六进制颜色值转换为RGB(A)颜色值
+  var a,b,c;
+  if((/^#/g).test(val)){
+      a = val.slice(1,3);
+      b = val.slice(3,5);
+      c = val.slice(5,7);
+      return 'rgba(' + parseInt(a,16) + ',' + parseInt(b,16) + ',' + parseInt(c,16) + ',' + op + ')'
+  } else {
+      return false
+  }
+}
 export default function (chartProps: IChartProps, drillOptions?: any) {
   const {
     data,
@@ -130,6 +141,32 @@ export default function (chartProps: IChartProps, drillOptions?: any) {
                 opacity: selectedItems && selectedItems.length > 0 ? 0.7 : 1
               }
             },
+            // // 添加线阴影
+            // lineStyle: {
+            //   normal: {
+            //       shadowColor: color.items[0].config.values[k],
+            //       shadowBlur: 15,
+            //       shadowOffsetY: 10
+            //   }
+            // },
+            // // 添加区域阴影
+            // areaStyle: {
+            //   normal: {
+            //     color: {
+            //       type: 'linear',
+            //       x: 0,
+            //       y: 0,
+            //       x2: 0,
+            //       y2: 1,
+            //       colorStops: [{
+            //           offset: 0, color: 'red' // 0% 处的颜色
+            //       }, {
+            //           offset: 1, color: 'blue' // 100% 处的颜色
+            //       }],
+            //       global: false // 缺省为 false
+            //     }
+            //   }
+            // },
             smooth,
             step,
             ...labelOption
@@ -170,11 +207,32 @@ export default function (chartProps: IChartProps, drillOptions?: any) {
           }
           // }
         }),
+        // // 添加线阴影
         // lineStyle: {
         //   normal: {
-        //     opacity: interactIndex === undefined ? 1 : 0.25
+        //       shadowColor: color.value[m.name] || defaultThemeColors[i],
+        //       shadowBlur: 20,
+        //       shadowOffsetY: 10
         //   }
         // },
+        // 添加区域阴影
+        areaStyle: {
+          normal: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                  offset: 1, color: colorFormat(color.value[m.name] || defaultThemeColors[i], 0) // 0% 处的颜色
+              }, {
+                  offset: 0, color: colorFormat(color.value[m.name] || defaultThemeColors[i], .7) // 100% 处的颜色
+              }],
+              global: false // 缺省为 false
+            }
+          }
+        },
         itemStyle: {
           normal: {
             // opacity: interactIndex === undefined ? 1 : 0.25

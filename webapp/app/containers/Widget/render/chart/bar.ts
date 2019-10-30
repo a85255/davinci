@@ -86,6 +86,7 @@ export default function (chartProps: IChartProps, drillOptions) {
         formatter: (params) => {
           const { value, seriesName } = params
           const m = metrics.find((m) => decodeMetricName(m.name) === seriesName)
+          console.log(m, 'm')
           let format: IFieldFormatConfig = m.format
           let formattedValue = value
           if (percentage) {
@@ -123,6 +124,7 @@ export default function (chartProps: IChartProps, drillOptions) {
 
   const series = []
   const seriesData = []
+  console.log(color)
   metrics.forEach((m, i) => {
     const decodedMetricName = decodeMetricName(m.name)
     const localeMetricName = `[${getAggregatorLocale(m.agg)}] ${decodedMetricName}`
@@ -238,7 +240,20 @@ export default function (chartProps: IChartProps, drillOptions) {
             borderWidth,
             borderType,
             barBorderRadius,
-            color: color.value[m.name] || defaultThemeColors[i]
+            // color: color.value[m.name] || defaultThemeColors[i]
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                  offset: 1, color: colorFormat(color.value[m.name] || defaultThemeColors[i], 0.5)
+              }, {
+                  offset: 0, color: color.value[m.name] || defaultThemeColors[i]
+              }],
+              global: false // 缺省为 false
+            }
           }
         },
         barGap: `${barGap}%`,
@@ -287,6 +302,17 @@ export default function (chartProps: IChartProps, drillOptions) {
   //       })
   //     }, 0)
   //   }
+  function colorFormat (val, op){   //HEX十六进制颜色值转换为RGB(A)颜色值
+    var a,b,c;
+    if((/^#/g).test(val)){
+        a = val.slice(1,3);
+        b = val.slice(3,5);
+        c = val.slice(5,7);
+        return 'rgba(' + parseInt(a,16) + ',' + parseInt(b,16) + ',' + parseInt(c,16) + ',' + op + ')'
+    } else {
+        return false
+    }
+  }
   function brushselected (params) {
     const brushComponent = params.batch[0]
     const brushed = []

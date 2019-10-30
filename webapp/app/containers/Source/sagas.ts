@@ -117,8 +117,8 @@ export function* testSourceConnection (action: SourceActionType) {
       url: `${api.source}/test`,
       data: payload.url
     })
-    yield put(SourceActions.sourceConnected())
     message.success('测试成功')
+    yield put(SourceActions.sourceConnected())
   } catch (err) {
     yield put(SourceActions.testSourceConnectionFail())
     errorHandler(err)

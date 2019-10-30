@@ -308,11 +308,11 @@ export class DashboardItemForm extends React.PureComponent<IDashboardItemFormPro
                 )}
               </FormItem>
             </Col>
-            <Col sm={4} className={frequencyClass}>
+            <Col sm={6} className={frequencyClass}>
               <FormItem
                 label="时长"
-                labelCol={{span: 12}}
-                wrapperCol={{span: 12}}
+                labelCol={{span: 10}}
+                wrapperCol={{span: 14}}
               >
                 {getFieldDecorator('frequency', {
                   rules: [{
@@ -321,8 +321,8 @@ export class DashboardItemForm extends React.PureComponent<IDashboardItemFormPro
                   }],
                   initialValue: 60
                 })(
-                  <InputNumber min={1} placeholder="秒" />
-                )}
+                  <InputNumber className={styles.input} min={1} placeholder="秒" />
+                )}秒
               </FormItem>
             </Col>
           </Row>

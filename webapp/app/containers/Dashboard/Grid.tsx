@@ -267,6 +267,7 @@ interface IDashboardItem {
   frequency?: number
 }
 
+let urlParams = {}
 export class Grid extends React.Component<IGridProps, IGridStates> {
   constructor (props) {
     super(props)
@@ -953,8 +954,8 @@ export class Grid extends React.Component<IGridProps, IGridStates> {
       this.props.onLoadSelectOptions(controlKey, paramsOrOptions, itemId)
     }
   }
-
   private globalControlChange = (controlRequestParamsByItem: IMapItemControlRequestParams) => {
+    urlParams = controlRequestParamsByItem
     this.props.onGlobalControlChange(controlRequestParamsByItem)
   }
 

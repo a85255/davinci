@@ -43,7 +43,6 @@ export default function (chartProps: IChartProps) {
     color,
     tip
   } = chartProps
-
   const {
     label,
     legend,
@@ -79,11 +78,14 @@ export default function (chartProps: IChartProps) {
     ...acc,
     [name]: {}
   }), {})
+  //  颜色数组名
+  let colorArray 
   data.forEach((row) => {
     if (!indicatorData[row[dimension.name]]) {
       indicatorData[row[dimension.name]] = -Infinity
     }
-
+    console.log(metrics)
+    colorArray = []
     metrics.forEach((m) => {
       const name = decodeMetricName(m.name)
       const cellVal = row[`${m.agg}(${name})`]
@@ -92,15 +94,21 @@ export default function (chartProps: IChartProps) {
         dimensionData[name][row[dimension.name]] = 0
       }
       dimensionData[name][row[dimension.name]] += cellVal
+      colorArray.push(color.value[m.name])
     })
   })
   const indicator = Object.keys(indicatorData).map((name: string) => ({
     name,
     max: indicatorMax + Math.round(indicatorMax * 0.1)
   }))
-  const seriesData = data.length > 0 ? Object.entries(dimensionData).map(([name, value]) => ({
+  const seriesData = data.length > 0 ? Object.entries(dimensionData).map(([name, value], i) => ({
     name,
-    value: Object.values(value)
+    value: Object.values(value),
+    areaStyle: {
+      normal: {
+        opacity: 0.2,
+      }
+    }
   })) : []
 
   const {
@@ -116,9 +124,9 @@ export default function (chartProps: IChartProps) {
     fontFamily: labelFontFamily,
     fontSize: labelFontSize
   }
-
   return {
     tooltip : {},
+    color: colorArray,
     legend: getLegendOption(legend, legendData),
     radar: {
       // type: 'log',

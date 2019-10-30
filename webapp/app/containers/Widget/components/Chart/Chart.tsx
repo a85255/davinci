@@ -39,18 +39,18 @@ export class Chart extends React.PureComponent<IChartProps> {
         this.instance.clear()
       }
     }
-
+    let options = chartOptionGenerator(
+      chartlibs.find((cl) => cl.id === selectedChart).name,
+      props,
+      {
+        instance: this.instance,
+        isDrilling,
+        getDataDrillDetail,
+        selectedItems: this.props.selectedItems
+      }
+    )
     this.instance.setOption(
-      chartOptionGenerator(
-        chartlibs.find((cl) => cl.id === selectedChart).name,
-        props,
-        {
-          instance: this.instance,
-          isDrilling,
-          getDataDrillDetail,
-          selectedItems: this.props.selectedItems
-        }
-      )
+      options
     )
 
 
@@ -74,6 +74,7 @@ export class Chart extends React.PureComponent<IChartProps> {
 
   public collectSelectedItems = (params) => {
     const { data, onSelectChartsItems, selectedChart, onDoInteract, onCheckTableInteract } = this.props
+    console.log(this.props)
     let selectedItems = []
     if (this.props.selectedItems && this.props.selectedItems.length) {
       selectedItems = [...this.props.selectedItems]

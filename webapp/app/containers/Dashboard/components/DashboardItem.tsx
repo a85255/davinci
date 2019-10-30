@@ -915,13 +915,16 @@ export class DashboardItem extends React.PureComponent<IDashboardItemProps, IDas
         hasDataConfig={hasDataConfig}
       />
     )
-
     return (
       <div className={gridItemClass} ref={(f) => this.container = f}>
         <div className={styles.header}>
           <div className={styles.title}>
             {controlPanelHandle}
             <h4>{widget.name}</h4>
+            {widget.description &&
+              <Tooltip placement="bottom" title={widget.description}>
+                <Icon className={styles.tips} type="question-circle" />
+              </Tooltip>}
             {loading && <Icon className={styles.control} type="loading" />}
             {descPanelHandle}
           </div>

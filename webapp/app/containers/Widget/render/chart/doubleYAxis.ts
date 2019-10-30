@@ -30,7 +30,20 @@ import {
   getGridPositions,
   getDimetionAxisOption
 } from './util'
-
+const defaultTheme = require('../../../../assets/json/echartsThemes/default.project.json')
+const defaultThemeColors = defaultTheme.theme.color
+function colorFormat (val, op){   //HEX十六进制颜色值转换为RGB(A)颜色值
+  var a,b,c;
+  if((/^#/g).test(val)){
+      a = val.slice(1,3);
+      b = val.slice(3,5);
+      c = val.slice(5,7);
+      return 'rgba(' + parseInt(a,16) + ',' + parseInt(b,16) + ',' + parseInt(c,16) + ',' + op + ')'
+  } else {
+      return false
+  }
+}
+let i = 0
 export default function (chartProps: IChartProps, drillOptions) {
   const {
     width,
@@ -193,7 +206,7 @@ export default function (chartProps: IChartProps, drillOptions) {
     ...gridOptions,
     ...legendOption
   }
-
+  i = 0
   return option
 }
 
@@ -224,8 +237,26 @@ export function getAixsMetrics (type, axisMetrics, data, stack, labelOption, sel
         normal: {
           opacity: selectedItems && selectedItems.length > 0 ? 0.25 : 1
         }
-      }
+      },
+      areaStyle: {
+        normal: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [{
+                offset: 1, color: colorFormat(defaultThemeColors[i], 0) // 0% 处的颜色
+            }, {
+                offset: 0, color: colorFormat(defaultThemeColors[i], 0.7) // 100% 处的颜色
+            }],
+            global: false // 缺省为 false
+          }
+        }
+      },
     })
+    i++
   })
   return seriesAxis
 }

@@ -48,20 +48,21 @@ export class Auth extends React.Component <IAuthProps, {}> {
     const authText = [ '看板管理', '视图管理', '数据源管理', '图表管理', '分享', '下载']
     const organizationMembers = authModules.map((auth, index) => {
       return {
-        user: authText[index]+ '(' + auth + ')',
-        permission: this.props.currentProjectRole ? this.props.currentProjectRole['permission'][`${auth}Permission`] : void 0
+        user: auth,
+        permission: this.props.currentProjectRole ? this.props.currentProjectRole['permission'][`${auth}Permission`] : void 0,
+        title: `${authText[index]}(${auth})`
       }
     })
     const columns = [
       {
-        dataIndex: 'user',
-        key: 'user',
+        dataIndex: 'title',
+        key: `user${uuid(8, 16)}`,
         render: (text) => text.toUpperCase()
       },
       {
           dataIndex: 'permission',
          // className: isHidden ? utilStyles.hide : '',
-          key: 'settings',
+          key: `settings${uuid(8, 16)}`,
           width: '59%',
           render: (text, record) => {
             switch (record.user) {
@@ -108,7 +109,7 @@ export class Auth extends React.Component <IAuthProps, {}> {
       }
     }
   ]
-
+  console.log(dvColumns)
     return (
       <div className={styles.auth}>
         <div className={styles.module}>

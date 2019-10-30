@@ -287,9 +287,10 @@ export class Share extends React.Component<IDashboardProps, IDashboardStates> {
   ) => {
     const {
       currentItemsInfo,
-      widgets
+      widgets,
+      config
     } = this.props
-
+    
     const widget = widgets.find((w) => w.id === widgetId)
     const widgetConfig: IWidgetConfig = JSON.parse(widget.config)
     const { cols, rows, metrics, secondaryMetrics, filters, color, label, size, xAxis, tip, orders, cache, expired } = widgetConfig
@@ -305,7 +306,16 @@ export class Share extends React.Component<IDashboardProps, IDashboardStates> {
     let drillStatus
     let pagination
     let nativeQuery
-
+    const qs = this.getQs(location.href.substr(location.href.indexOf('?') + 1))
+    let param = ''
+    if (qs.param && config) {
+      let conf = JSON.parse(config)
+      if (conf.filters) {
+        param = JSON.parse(decodeURI(qs.param))
+        cachedQueryConditions.globalVariables.push(param.variables)
+      }
+    }
+    console.log(cachedQueryConditions)
     if (queryConditions) {
       tempFilters = queryConditions.tempFilters !== void 0 ? queryConditions.tempFilters : cachedQueryConditions.tempFilters
       linkageFilters = queryConditions.linkageFilters !== void 0 ? queryConditions.linkageFilters : cachedQueryConditions.linkageFilters
@@ -937,14 +947,14 @@ export class Share extends React.Component<IDashboardProps, IDashboardStates> {
               <h2 className={styles.shareTitle}>{title}</h2>
             </Col>
           </Row>
-          <GlobalControlPanel
+          {/* <GlobalControlPanel
             currentDashboard={dashboard}
             currentItems={currentItems}
             onGetOptions={this.getOptions}
             mapOptions={dashboardSelectOptions}
             onChange={this.globalControlChange}
             onSearch={this.globalControlSearch}
-          />
+          /> */}
         </Container.Title>
         {grids}
         <div className={styles.gridBottom} />

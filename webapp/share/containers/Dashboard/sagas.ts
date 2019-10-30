@@ -43,7 +43,6 @@ import { errorHandler } from '../../../app/utils/util'
 import api from '../../../app/utils/api'
 import config, { env } from '../../../app/globalConfig'
 import { IDistinctValueReqeustParams } from '../../../app/components/Filters'
-const shareHost = config[env].shareHost
 
 export function* getDashboard (action) {
   const { payload } = action
@@ -87,7 +86,7 @@ export function* getResultset (action) {
     ...rest
   } = requestParams
   const { pageSize, pageNo } = pagination || { pageSize: 0, pageNo: 0 }
-
+  console.log(payload,'dfdfdafadsfad')
   try {
     const resultset = yield call(request, {
       method: 'post',

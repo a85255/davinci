@@ -28,7 +28,17 @@ import {
   getLabelOption
 } from './util'
 import { EChartOption } from 'echarts'
-
+function colorFormat (val, op){   //HEX十六进制颜色值转换为RGB(A)颜色值
+  var a,b,c;
+  if((/^#/g).test(val)){
+      a = val.slice(1,3);
+      b = val.slice(3,5);
+      c = val.slice(5,7);
+      return 'rgba(' + parseInt(a,16) + ',' + parseInt(b,16) + ',' + parseInt(c,16) + ',' + op + ')'
+  } else {
+      return false
+  }
+}
 export default function (chartProps: IChartProps, drillOptions?: any) {
   const {
     width,
@@ -60,9 +70,8 @@ export default function (chartProps: IChartProps, drillOptions?: any) {
   const { selectedItems } = drillOptions
   // formatter: '{b}({d}%)'
   const labelOption = {
-    label: getLabelOption('pie', label)
+    // label: getLabelOption('pie', label)
   }
-
   const roseTypeValue = roseType ? 'radius' : ''
   const radiusValue = (!circle && !roseType) || (!circle && roseType) ? `70%` : ['48%', '70%']
 
@@ -125,8 +134,10 @@ export default function (chartProps: IChartProps, drillOptions?: any) {
       }
 
       let colorArr = []
+      let colorObj = {}
       if (color.items.length) {
         const colorvaluesObj = color.items[0].config.values
+        colorObj = colorvaluesObj
         for (const keys in colorvaluesObj) {
           if (colorvaluesObj.hasOwnProperty(keys)) {
             colorArr.push(colorvaluesObj[keys])
@@ -135,11 +146,10 @@ export default function (chartProps: IChartProps, drillOptions?: any) {
       } else {
         colorArr = ['#509af2']
       }
-
       seriesObj = {
         name: '',
         type: 'pie',
-        avoidLabelOverlap: false,
+        avoidLabelOverlap: true,
         center: legend.showLegend ? [leftValue, topValue] : [width / 2, height / 2],
         color: colorArr,
         data: seriesData.map((data, index) => {
@@ -160,7 +170,22 @@ export default function (chartProps: IChartProps, drillOptions?: any) {
               shadowColor: 'rgba(0, 0, 0, 0.5)'
           },
           normal: {
-            opacity: selectedItems && selectedItems.length > 0 ? 0.25 : 1
+            opacity: selectedItems && selectedItems.length > 0 ? 0.25 : 1,
+            color: function (data) {
+              return {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                    offset: 0, color: colorArr.length === 1  ? colorFormat(colorArr[0], .6) : colorFormat(colorObj[data.name], .6)// 0% 处的颜色
+                }, {
+                    offset: 1, color: colorArr.length === 1  ? colorFormat(colorArr[0], 1) : colorFormat(colorObj[data.name], 1) // 100% 处的颜色
+                }],
+                // global: false // 缺省为 false
+              }
+            }
           }
         },
         ...labelOption,
@@ -172,12 +197,12 @@ export default function (chartProps: IChartProps, drillOptions?: any) {
       seriesObj = {
         name: decodedMetricName,
         type: 'pie',
-        avoidLabelOverlap: false,
+        avoidLabelOverlap: true,
         center: [width / 2, height / 2],
         data: data.map((d, index) => {
           const itemStyleObj = selectedItems && selectedItems.length && selectedItems.some((item) => item === index) ? {itemStyle: {
             normal: {
-              opacity: 1
+              opacity: 1,
             }
           }} : {}
           return {
@@ -193,7 +218,7 @@ export default function (chartProps: IChartProps, drillOptions?: any) {
               shadowColor: 'rgba(0, 0, 0, 0.5)'
           },
           normal: {
-            opacity: selectedItems && selectedItems.length > 0 ? 0.25 : 1
+            opacity: selectedItems && selectedItems.length > 0 ? 0.25 : 1,
           }
         },
         ...labelOption,
@@ -203,12 +228,11 @@ export default function (chartProps: IChartProps, drillOptions?: any) {
     }
     seriesArr.push(seriesObj)
   })
-
   const tooltip: EChartOption.Tooltip = {
     trigger: 'item',
     formatter: '{b} <br/>{c} ({d}%)'
-}
-
+  }
+  console.log(seriesArr)
   return {
     tooltip,
     legend: getLegendOption(legend, legendData),

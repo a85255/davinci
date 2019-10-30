@@ -1131,6 +1131,7 @@ export class OperatingPanel extends React.Component<IOperatingPanelProps, IOpera
   private dropboxValueChange = (name) => (key: string, value: string | number) => {
     const { mode, dataParams, styleParams } = this.state
     const { color, size } = dataParams
+    console.log(color)
     switch (name) {
       case 'color':
         if (key === 'all' && mode === 'pivot') {
@@ -1138,6 +1139,7 @@ export class OperatingPanel extends React.Component<IOperatingPanelProps, IOpera
             color.value[k] = value
           })
         } else {
+          console.log(111,key)
           color.value[key] = value
         }
         break

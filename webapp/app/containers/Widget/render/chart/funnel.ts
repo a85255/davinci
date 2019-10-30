@@ -28,7 +28,17 @@ import {
   getLegendOption,
   getLabelOption
 } from './util'
-
+function colorFormat (val, op){   //HEX十六进制颜色值转换为RGB(A)颜色值
+  var a,b,c;
+  if((/^#/g).test(val)){
+      a = val.slice(1,3);
+      b = val.slice(3,5);
+      c = val.slice(5,7);
+      return 'rgba(' + parseInt(a,16) + ',' + parseInt(b,16) + ',' + parseInt(c,16) + ',' + op + ')'
+  } else {
+      return false
+  }
+}
 export default function (chartProps: IChartProps, drillOptions?: any) {
   const {
     width,
@@ -170,7 +180,22 @@ export default function (chartProps: IChartProps, drillOptions?: any) {
               shadowColor: 'rgba(0, 0, 0, 0.5)'
           },
           normal: {
-            opacity: selectedItems && selectedItems.length > 0 ? 0.25 : 1
+            opacity: selectedItems && selectedItems.length > 0 ? 0.25 : 1,
+            color: function (data) {
+              return {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                    offset: 1, color: colorArr.length === 1  ? colorFormat(colorArr[0], .6) : colorFormat(colorArr[data.dataIndex], .6)// 0% 处的颜色
+                }, {
+                    offset: 0, color: colorArr.length === 1  ? colorFormat(colorArr[0], 1) : colorFormat(colorArr[data.dataIndex], 1) // 100% 处的颜色
+                }],
+                // global: false // 缺省为 false
+              }
+            }
           }
         },
         ...labelOption

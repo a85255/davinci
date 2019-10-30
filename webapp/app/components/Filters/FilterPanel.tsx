@@ -270,7 +270,6 @@ export class FilterPanel extends Component<IFilterPanelProps & FormComponentProp
             .map(([itemId, info]) => Number(itemId))
         )
       }, [])
-      console.log(Array.from(new Set(itemIds)),1111)
     this.props.onSearch(Array.from(new Set(itemIds)))
   }
 
